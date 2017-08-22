@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.demon.dao.ICBCRecord;
+import com.demon.dao.ICBCFeature;
 import com.demon.dao.Instance;
 import com.demon.tools.DReader;
 
-public class LoadDataSet implements LoadSet{
+public class LoadFeatureSet implements LoadSet{
 	
 	private Map<String, List<Instance>> dataSet;
 	
-	public LoadDataSet(String fileName){
+	public LoadFeatureSet(String fileName){
 		dataSet = new HashMap<>();
 		loadData(fileName);
 	}
@@ -24,7 +24,7 @@ public class LoadDataSet implements LoadSet{
 		DReader reader = new DReader(fileName);
 		while (reader.hasNext()){
 			String data = reader.next();
-			ICBCRecord record = new ICBCRecord(data);
+			ICBCFeature record = new ICBCFeature(data);
 			dataSet.computeIfAbsent(record.getUser(), k -> new ArrayList<>()).add(record);
 		}
 	}
@@ -38,7 +38,7 @@ public class LoadDataSet implements LoadSet{
 	}
 	
 	public static void main(String[] args) {
-		LoadDataSet loader = new LoadDataSet("data/ICBCtrain.txt");
+		LoadFeatureSet loader = new LoadFeatureSet("data/process/feature/feature_normal_ICBCtrain.txt");
 		int cnt = 0;
 		for (String user : loader.getAllUsers()){
 			for (Instance rec : loader.getDataSet().get(user)){

@@ -1,31 +1,34 @@
 package com.demon.dao;
 
-public class ICBCRecord {
-	
+public class ICBCRecord implements Instance {
+
+	public static final String[] heads = { "user", "feature1", "feature2", "feature3", "feature4", "feature5",
+			"feature6", "feature7", "feature8", "label" };
+
 	private String user;
-	
+
 	private String feature1;
-	
+
 	private String feature2;
-	
+
 	private String feature3;
-	
+
 	private String feature4;
-	
+
 	private String feature5;
-	
+
 	private String feature6;
-	
-	private String feature7;
-	
+
+	private String feature7; //transAmount
+
 	private String feature8;
-	
+
 	private String label;
-	
-	public ICBCRecord(){
+
+	public ICBCRecord() {
 	}
 
-	public ICBCRecord(String record){
+	public ICBCRecord(String record) {
 		String[] splits = record.split("\\s+");
 		this.user = splits[0];
 		this.feature1 = splits[1];
@@ -38,7 +41,7 @@ public class ICBCRecord {
 		this.feature8 = splits[8];
 		this.label = splits[9];
 	}
-	
+
 	public String getUser() {
 		return user;
 	}
@@ -118,8 +121,8 @@ public class ICBCRecord {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
-	public String toStr(){
+
+	public String toStr() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(user + " ");
 		sb.append(feature1 + " ");
@@ -133,11 +136,22 @@ public class ICBCRecord {
 		sb.append(label);
 		return sb.toString();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ICBCRecord [user=" + user + ", feature1=" + feature1 + ", feature2=" + feature2 + ", feature3="
 				+ feature3 + ", feature4=" + feature4 + ", feature5=" + feature5 + ", feature6=" + feature6
 				+ ", feature7=" + feature7 + ", feature8=" + feature8 + ", label=" + label + "]";
+	}
+
+	@Override
+	public String[] toHead() {
+		return ICBCRecord.heads;
+	}
+
+	@Override
+	public String[] toContent() {
+		return new String[] { user, feature1, feature2, feature3, feature4, feature5, feature6, feature7, feature8,
+				label };
 	}
 }
