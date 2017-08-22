@@ -25,11 +25,11 @@ public class ICBCFeature implements Instance {
 		this.ip = record[5];
 	}
 	
-	public String getIp() {
+	public String getIP() {
 		return ip;
 	}
 
-	public void setIp(String ip) {
+	public void setIP(String ip) {
 		this.ip = ip;
 	}
 

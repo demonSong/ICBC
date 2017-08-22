@@ -48,10 +48,9 @@ public class FeatureExtract {
 					feature.setAvgMoney(stat.avg_money);
 					
 					// 常用IP维度
-					feature.setIp(rec.getFeature8()); //是否常用IP
+					feature.setIP(rec.getFeature8()); //是否常用IP
 					
 					// 交易时间维度
-					
 					
 					// 交易地点维度
 					
@@ -101,6 +100,7 @@ public class FeatureExtract {
 	
 	public static void main(String[] args) {
 		FeatureExtract feature = new FeatureExtract("data/process/normal_ICBCtrain.txt");
+		feature = new FeatureExtract("data/process/abnormal_ICBCtrain.txt");
 	}
 	
 }
