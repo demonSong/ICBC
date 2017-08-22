@@ -42,6 +42,7 @@ public class DReader {
 		DReader reader = new DReader("data/test.txt");
 		while (reader.hasNext()){
 			String line = reader.next();
+			System.out.println(line);
 		}
 	}
 	

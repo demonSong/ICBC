@@ -1,9 +1,6 @@
 package com.demon.tools;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -56,7 +53,8 @@ public class DWriter {
 	
 	public static void main(String[] args) {
 		DWriter out = new DWriter("data/test.txt");
-		out.println("sss");
+		out.println("我是测试文件");
+		out.close();
 	}
 
 }
