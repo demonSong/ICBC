@@ -27,6 +27,8 @@ import weka.clusterers.EM;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 /**
  * An example class that shows the use of Weka clusterers from Java.
@@ -41,7 +43,7 @@ public class Clustering {
    * @param filename      the name of the ARFF file to run on
    */
   public Clustering(String filename) throws Exception {
-    ClusterEvaluation eval;
+    ClusterEvaluation       eval;
     Instances               data;
     DensityBasedClusterer   cl;    
 
@@ -64,6 +66,6 @@ public class Clustering {
    *   ClusteringDemo arff-file
    */
   public static void main(String[] args) throws Exception {
-    new Clustering("data/process/feature/feature_normal_ICBCtrain.arff");
+	  new Clustering("data/process/feature/feature_normal_ICBCtrain.arff");
   }
 }

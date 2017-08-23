@@ -21,22 +21,21 @@
 
 package com.demon.visualize;
 
-import weka.clusterers.AbstractClusterer;
-import weka.clusterers.ClusterEvaluation;
-import weka.clusterers.Clusterer;
-import weka.core.Instances;
-import weka.core.Utils;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.gui.explorer.ClustererAssignmentsPlotInstances;
-import weka.gui.explorer.ExplorerDefaults;
-import weka.gui.visualize.PlotData2D;
-import weka.gui.visualize.VisualizePanel;
-
 import java.awt.BorderLayout;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JFrame;
+
+import weka.clusterers.AbstractClusterer;
+import weka.clusterers.ClusterEvaluation;
+import weka.clusterers.Clusterer;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
+import weka.gui.explorer.ClustererAssignmentsPlotInstances;
+import weka.gui.explorer.ExplorerDefaults;
+import weka.gui.visualize.PlotData2D;
+import weka.gui.visualize.VisualizePanel;
 
 /**
  * Runs a clusterer on a dataset and visualizes the cluster assignments, 
@@ -55,7 +54,7 @@ public class VisualizeClusterAssignments {
   
   public static void main(String[] args) throws Exception {
     // load data
-    Instances train = DataSource.read("data/examples/iris.arff");
+    Instances train = DataSource.read("data/process/feature/feature_normal_ICBCtrain.arff");
     // some data formats store the class attribute information as well
     if (train.classIndex() != -1)
       throw new IllegalArgumentException("Data cannot have class attribute!");

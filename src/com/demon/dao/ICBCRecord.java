@@ -17,11 +17,11 @@ public class ICBCRecord implements Instance {
 
 	private String feature5;
 
-	private String feature6;
+	private String feature6; //transAmount
 
-	private String feature7; //transAmount
+	private String feature7; 
 
-	private String feature8;
+	private String feature8; //是否常用IP
 
 	private String label;
 
@@ -89,11 +89,19 @@ public class ICBCRecord implements Instance {
 	public void setFeature5(String feature5) {
 		this.feature5 = feature5;
 	}
-
+	
+	/**
+	 * 交易金额
+	 * @return
+	 */
 	public String getFeature6() {
 		return feature6;
 	}
 
+	/**
+	 * 交易金额
+	 * @param feature7
+	 */
 	public void setFeature6(String feature6) {
 		this.feature6 = feature6;
 	}
@@ -105,11 +113,19 @@ public class ICBCRecord implements Instance {
 	public void setFeature7(String feature7) {
 		this.feature7 = feature7;
 	}
-
+	
+	/**
+	 * 是否常用IP
+	 * @return
+	 */
 	public String getFeature8() {
 		return feature8;
 	}
 
+	/**
+	 * 是否常用IP
+	 * @param feature8
+	 */
 	public void setFeature8(String feature8) {
 		this.feature8 = feature8;
 	}

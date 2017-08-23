@@ -1,12 +1,16 @@
 package com.demon.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.demon.dao.ICBCFeature;
 import com.demon.dao.ICBCRecord;
 import com.demon.dao.Instance;
 import com.demon.tools.DWriter;
 import com.demon.tools.DataToCSV;
+
+import weka.core.SerializationHelper;
 
 /**
  * 做特征处理 + 特征持久化 + 转csv
@@ -22,7 +26,11 @@ public class FeatureExtract {
 	private DWriter out;
 	private String file;
 	
+	//每个用户的指标统计
+	private Map<String, Statics> cache;
+	
 	public FeatureExtract(String fileName){
+		cache = new HashMap<>();
 		String[] splits = fileName.split("/");
 		this.file = splits[splits.length - 1];
 		dataSet = new LoadDataSet(fileName);
@@ -34,7 +42,9 @@ public class FeatureExtract {
 		out = new DWriter(fileName);
 		for (String user : dataSet.getAllUsers()){
 			List<Instance> records = dataSet.getDataSet().get(user);
+			// 每个用户有个 统计指标
 			Statics stat = new Statics(records);
+			cache.put(user, stat);
 			for (Instance record : records){
 				if (record instanceof ICBCRecord){
 					ICBCRecord rec = (ICBCRecord) record;
@@ -60,43 +70,13 @@ public class FeatureExtract {
 		}
 		out.close();
 		new DataToCSV(new LoadFeatureSet(fileName), fileName, new ICBCFeature());
-	}
-	
-	class Statics{
 		
-		String max_money;
-		String min_money;
-		String avg_money;
-		
-		public Statics(List<Instance> records){
-			
-			int n = records.size();
-			
-			// 计算交易金额的一些特征
-			
-			double max = Double.NEGATIVE_INFINITY;
-			double min = Double.POSITIVE_INFINITY;
-			double avg = 0.0;
-			
-			double sum = 0.0;
-			for (Instance rec : records){
-				if (rec instanceof ICBCRecord){
-					ICBCRecord record = (ICBCRecord) rec;
-					double money = Double.parseDouble(record.getFeature6());
-					max = Math.max(max, money);
-					min = Math.min(min, money);
-					sum += money;
-				}
-			}
-			
-			avg = sum / n;
-
-			max_money = String.valueOf(max);
-			min_money = String.valueOf(min);
-			avg_money = String.valueOf(String.format("%.3f", avg));
+		try {
+			SerializationHelper.write("data/stats/total.obj", cache);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
 	
 	public static void main(String[] args) {
 		FeatureExtract feature = new FeatureExtract("data/process/normal_ICBCtrain.txt");

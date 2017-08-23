@@ -1718,7 +1718,7 @@ RevisionHandler {
     text.append(stringWithoutHeader());
     return text.toString();
   }
-
+  
   /**
    * Returns the instances in the dataset as a string in ARFF format. Strings
    * are quoted if they contain whitespace characters, or if they are a question

@@ -2,7 +2,7 @@ package com.demon.dao;
 
 public class ICBCFeature implements Instance {
 	
-	public static final String[] heads = { "user", "transAmount", "maxMoney", "minMoney", "avgMoney", "IP"};
+	public static final String[] heads = { "user", "transAmount", "maxMoney", "minMoney", "avgMoney", "IP", "label"};
 	
 	private String user;
 	
@@ -12,6 +12,8 @@ public class ICBCFeature implements Instance {
 	private String avgMoney; // 均值 在聚类本身难道不能反映出来么？
 	
 	private String ip; // 是否常用IP
+	
+	private String label;
 	
 	public ICBCFeature(){}
 	
@@ -23,8 +25,20 @@ public class ICBCFeature implements Instance {
 		this.minMoney = record[3];
 		this.avgMoney = record[4];
 		this.ip = record[5];
+		
+		if (6 < record.length){
+			this.label = record[6];
+		}
 	}
 	
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
 	public String getIP() {
 		return ip;
 	}
@@ -81,7 +95,9 @@ public class ICBCFeature implements Instance {
 		sb.append(maxMoney + " ");
 		sb.append(minMoney + " ");
 		sb.append(avgMoney + " "); 
-		sb.append(ip);
+		sb.append(ip + " ");
+		
+		if (label != null ) sb.append(label);
 		return sb.toString(); 
 	}
 	
@@ -92,7 +108,7 @@ public class ICBCFeature implements Instance {
 
 	@Override
 	public String[] toContent() {
-		return new String[]{user, transAmount, maxMoney, minMoney, avgMoney, ip};
+		return new String[]{user, transAmount, maxMoney, minMoney, avgMoney, ip, label};
 	}
 
 }
