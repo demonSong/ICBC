@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.demon.tools.FileHelper;
+
 import weka.classifiers.Classifier;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
@@ -20,44 +22,49 @@ public class Classifying {
 	
 	Map<String, List<Instance>> users;
 	Map<String, Classifier> classifiers;
-	public Classifying() throws Exception{
-		users = new HashMap<>();
-		classifiers = new HashMap<>();
-		Instances normal = DataSource.read("data/classify/classify_normal_ICBCtrain.arff");
-		Instances abnormal = DataSource.read("data/classify/classify_abnormal_ICBCtrain.arff");
-		
-		// 群体分类算法
-		
-		
-		// 个体分类
-		for (int i = 0; i < normal.numInstances(); ++i){
-			String user = normal.instance(i).toString(0);
-			users.computeIfAbsent(user, k -> new ArrayList<>()).add(normal.instance(i));
-		}
-		
-		for (String key : users.keySet()){
-			Instances data = new Instances(abnormal);
-			for (Instance instance : users.get(key)){
-				data.add(instance);
+	
+	public Classifying(String dataSetName){
+		try {
+			users = new HashMap<>();
+			classifiers = new HashMap<>();
+			
+			Instances normal = DataSource.read("data/classify/classify_normal_" + dataSetName + "train.arff");
+			Instances abnormal = DataSource.read("data/classify/classify_abnormal_" + dataSetName + "train.arff");
+			
+			// 个体分类
+			for (int i = 0; i < normal.numInstances(); ++i){
+				String user = normal.instance(i).toString(0);
+				users.computeIfAbsent(user, k -> new ArrayList<>()).add(normal.instance(i));
 			}
 			
-			Remove filter = new Remove();
-			filter.setAttributeIndices("1");
-			filter.setInputFormat(data);
-			Instances train = Filter.useFilter(data, filter);
-			train.setClassIndex(train.numAttributes() - 1);
+			for (String key : users.keySet()){
+				Instances data = new Instances(abnormal);
+				for (Instance instance : users.get(key)){
+					data.add(instance);
+				}
+				
+				Remove filter = new Remove();
+				filter.setAttributeIndices("1"); // 移除用户ID
+				filter.setInputFormat(data);
+				Instances train = Filter.useFilter(data, filter);
+				train.setClassIndex(train.numAttributes() - 1);
+				
+				Classifier cls = new RandomForest();
+				cls.buildClassifier(train);
+				
+				classifiers.put(key, cls);
+			}
 			
-			Classifier cls = new RandomForest();
-			cls.buildClassifier(train);
-			
-			classifiers.put(key, cls);
+			String objFile = "data/model/classifier.model";
+			FileHelper.clearFile(objFile);
+			SerializationHelper.write(objFile, classifiers);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		SerializationHelper.write("data/model/user.model", classifiers);
 	}
 	
 	public static void main(String[] args) throws Exception {
-		new Classifying();
+		new Classifying("Demo");
 	}
 	
 }

@@ -21,6 +21,8 @@
  */
 package com.demon.ml;
 
+import com.demon.tools.FileHelper;
+
 import weka.clusterers.ClusterEvaluation;
 import weka.clusterers.DensityBasedClusterer;
 import weka.clusterers.EM;
@@ -37,35 +39,47 @@ import weka.filters.unsupervised.attribute.Remove;
  * @version $Revision: 5578 $
  */
 public class Clustering {
-  /**
-   * Run clusterers
-   *
-   * @param filename      the name of the ARFF file to run on
-   */
-  public Clustering(String filename) throws Exception {
-    ClusterEvaluation       eval;
-    Instances               data;
-    DensityBasedClusterer   cl;    
+	/**
+	 * Run clusterers
+	 *
+	 * @param filename
+	 *            the name of the ARFF file to run on
+	 */
+	public Clustering(String filename) {
+		try {
+			ClusterEvaluation       eval;
+			Instances               data;
+			DensityBasedClusterer   cl;
 
-    data = DataSource.read(filename);
-    
-    cl   = new EM();
-    cl.buildClusterer(data);
-    
-    SerializationHelper.write("data/model/em.model", cl);
-    
-    eval = new ClusterEvaluation();
-    eval.setClusterer(cl);
-    
-    eval.evaluateClusterer(new Instances(data));
-    System.out.println(eval.clusterResultsToString());
-  }
+			data = DataSource.read(filename);
 
-  /**
-   * usage:
-   *   ClusteringDemo arff-file
-   */
-  public static void main(String[] args) throws Exception {
-	  new Clustering("data/process/feature/feature_normal_ICBCtrain.arff");
-  }
+			Remove filter = new Remove();
+			int[] remove = { 0, data.numAttributes() - 1 };
+			filter.setAttributeIndicesArray(remove); // 删除标签 和 用户ID
+			filter.setInputFormat(data);
+			Instances train = Filter.useFilter(data, filter);
+
+			cl = new EM();
+			cl.buildClusterer(train);
+
+			String modelFile = "data/model/cluster.model";
+			FileHelper.clearFile(modelFile);
+			SerializationHelper.write(modelFile, cl);
+
+			eval = new ClusterEvaluation();
+			eval.setClusterer(cl);
+
+			eval.evaluateClusterer(new Instances(data));
+			System.out.println(eval.clusterResultsToString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * usage: ClusteringDemo arff-file
+	 */
+	public static void main(String[] args) throws Exception {
+		new Clustering("data/process/feature/feature_normal_Demotrain.arff");
+	}
 }

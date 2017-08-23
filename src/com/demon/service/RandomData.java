@@ -63,7 +63,14 @@ public class RandomData {
 		return set;
 	}
 	
-	public static void persistData(String path, int num){
+	
+	/**
+	 * 仿真数据生成
+	 * @param path 仿真文件路径
+ 	 * @param num 仿真数据量
+	 * @param withTest 是否生成test
+	 */
+	public static void persistData(String path, int num, boolean withTest){
 		DWriter out = new DWriter(path + "train.txt");
 		List<String> users = initUser(15, 1600);
 		List<String> merchants = initMerchant(50);
@@ -73,6 +80,8 @@ public class RandomData {
 		}
 		out.close();
 		
+		if (!withTest) return;
+		
 		out = new DWriter(path + "test.txt");
 		for (int i = 0; i < num / 3; ++i){
 			out.println(randomData(users, merchants));
@@ -81,6 +90,6 @@ public class RandomData {
 	}
 	
 	public static void main(String[] args) {
-		RandomData.persistData("data/ICBC", 16592);
+		RandomData.persistData("data/ICBC", 16592, true);
 	}
 }

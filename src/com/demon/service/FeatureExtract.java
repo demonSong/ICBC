@@ -9,6 +9,7 @@ import com.demon.dao.ICBCRecord;
 import com.demon.dao.Instance;
 import com.demon.tools.DWriter;
 import com.demon.tools.DataToCSV;
+import com.demon.tools.FileHelper;
 
 import weka.core.SerializationHelper;
 
@@ -37,8 +38,9 @@ public class FeatureExtract {
 		processFeature(dataSet);
 	}
 	
-	public void processFeature(LoadDataSet dataSet){
+	private void processFeature(LoadDataSet dataSet){
 		String fileName = "data/process/feature/feature_" + file;
+		FileHelper.clearFile(fileName);
 		out = new DWriter(fileName);
 		for (String user : dataSet.getAllUsers()){
 			List<Instance> records = dataSet.getDataSet().get(user);
@@ -50,6 +52,7 @@ public class FeatureExtract {
 					ICBCRecord rec = (ICBCRecord) record;
 					ICBCFeature feature = new ICBCFeature();
 					feature.setUser(user);
+					feature.setLabel(rec.getLabel());
 					
 					// 交易金额维度
 					feature.setTransAmount(rec.getFeature6());
@@ -70,9 +73,10 @@ public class FeatureExtract {
 		}
 		out.close();
 		new DataToCSV(new LoadFeatureSet(fileName), fileName, new ICBCFeature());
-		
 		try {
-			SerializationHelper.write("data/stats/total.obj", cache);
+			String objFile = "data/stats/total.obj";
+			FileHelper.clearFile(objFile);
+			SerializationHelper.write(objFile, cache);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

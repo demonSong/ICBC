@@ -17,6 +17,7 @@ public class DataToCSV {
 		int index = fileName.indexOf(".");
 		String newFileName = fileName.substring(0, index);
 		try {
+			FileHelper.clearFile(newFileName + ".csv"); 
 			writer = new CSVWriter(new FileWriter(newFileName + ".csv"));
 			writeHead(type);
 			writeContent(dataSet);
