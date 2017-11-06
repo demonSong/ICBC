@@ -3,9 +3,11 @@ package com.demon.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.demon.tools.DWriter;
 
@@ -163,6 +165,35 @@ public class NormalGene {
 		out = new DWriter("data/data_test.txt");
 		for (int i = 0; i < 300; ++i){
 			List<String> trans = g.userNormalTestData(String.format("%04d", i));
+			for (String tran : trans){
+				out.println(tran);
+			}
+		}
+		out.close();
+		
+		Set<String> users = new HashSet<>();
+		while (users.size() < 100){
+			int user = 1 + new Random().nextInt(300);
+			String u = String.format("%04d", user);
+			users.add(u);
+		}
+		
+		
+		out = new DWriter("data/data_train.txt");
+		FraudGene fg = new FraudGene();
+		for (String user : users){
+			P feature = g.mem.get(user);
+			List<String> trans = fg.add(user, 20, feature.amount, feature.diff);
+			for (String tran : trans){
+				out.println(tran);
+			}
+		}
+		out.close();
+		
+		out = new DWriter("data/data_test.txt");
+		for (String user : users){
+			P feature = g.mem.get(user);
+			List<String> trans = fg.add(user, 20, feature.amount, feature.diff);
 			for (String tran : trans){
 				out.println(tran);
 			}

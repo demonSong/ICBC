@@ -40,6 +40,8 @@ public class DataToCSV {
 		}
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		DataToCSV toCSV = new DataToCSV(new LoadDataSet("data/process/normal_ICBCtrain.txt"), "data/process/normal_ICBCtrain.txt", new ICBCRecord());
 	}
