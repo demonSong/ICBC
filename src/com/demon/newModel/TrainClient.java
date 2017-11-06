@@ -16,6 +16,9 @@ import weka.core.converters.ConverterUtils.DataSource;
 public class TrainClient {
 	
 	public static void main(String[] args) throws Exception {
+		new DataToCSV(new LoadData("data/data_train.txt"), "data/data_train.txt", new DataRecord());
+		new DataToCSV(new LoadData("data/data_test.txt"), "data/data_test.txt", new DataRecord());
+		
 		CSV2ARFF.csv2Arff("data/data_train.csv");
 		CSV2ARFF.csv2Arff("data/data_test.csv");
 		
